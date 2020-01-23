@@ -1,0 +1,17 @@
+name: Galactic Space Wars
+version: 0.1.0
+
+authors:
+  - Matt Swieboda <mswiebod@gmail.com>
+
+targets:
+  gsw:
+    main: src/gsw.cr
+
+crystal: 0.32.1
+
+license: MIT
+
+dependencies:
+  cray:
+    gitlab: zatherz/cray
