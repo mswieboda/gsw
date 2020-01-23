@@ -19,10 +19,16 @@ module Gsw
       height = (SCREEN_HEIGHT / 1.5).to_i
 
       @map = Map.new(
+        width: 1600,
+        height: 1000
+      )
+
+      @view = View.new(
         x: ((SCREEN_WIDTH - width) / 2).to_i,
         y: ((SCREEN_HEIGHT - height) / 2).to_i,
         width: width,
-        height: height
+        height: height,
+        map: @map
       )
     end
 
@@ -37,10 +43,11 @@ module Gsw
     end
 
     def update(frame_time)
+      @view.update(frame_time)
     end
 
     def draw
-      @map.draw
+      @view.draw(0, 0)
     end
 
     def draw_wrapper

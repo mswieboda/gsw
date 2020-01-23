@@ -2,25 +2,48 @@ module Gsw
   class Map < Obj
     @objs : Array(Obj)
 
-    def initialize(@x, @y, @width, @height)
+    GRID_SIZE = 10
+    GRID_BORDER = 1
+
+    def initialize(width, height)
+      initialize(x: 0, y: 0, width: width, height: height)
+
       @objs = [] of Obj
 
       @objs << Ship.new(x: 50, y: 100)
     end
 
+    def move(dx : Int32 = 0, dy : Int32 = 0)
+      puts "Map#move(dx: #{dx}, dy: #{dy})"
+      @x += dx
+      @y += dy
+    end
+
     def update
     end
 
-    def draw
+    def draw(parent_x, parent_y)
       LibRay.draw_rectangle(
-        pos_x: x,
-        pos_y: y,
+        pos_x: parent_x + x,
+        pos_y: parent_y + y,
         width: width,
         height: height,
-        color: LibRay::GRAY
+        color: LibRay::BLUE
       )
 
-      @objs.each(&.draw(x, y))
+      (width / GRID_SIZE).to_i.times do |grid_x|
+        (height / GRID_SIZE).to_i.times do |grid_y|
+          LibRay.draw_rectangle(
+            pos_x: parent_x + x + grid_x * GRID_SIZE,
+            pos_y: parent_y + y + grid_y * GRID_SIZE,
+            width: GRID_SIZE - GRID_BORDER,
+            height: GRID_SIZE - GRID_BORDER,
+            color: LibRay::BLACK
+          )
+        end
+      end
+
+      @objs.each(&.draw(parent_x + x, parent_y + y))
     end
   end
 end
