@@ -1,7 +1,7 @@
 module Gsw
   class Ship < Obj
 
-    SIZE = 10
+    SIZE = 100
 
     def initialize(x, y)
       initialize(x: x, y: y, width: SIZE, height: SIZE)

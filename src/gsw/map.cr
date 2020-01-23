@@ -38,28 +38,20 @@ module Gsw
 
       # Grid
       if Game::DEBUG
-        LibRay.draw_rectangle(
-          pos_x: x,
-          pos_y: y,
-          width: width,
-          height: height,
-          color: LibRay::BLUE
-        )
-
         (width / GRID_SIZE).to_i.times do |col|
           (height / GRID_SIZE).to_i.times do |row|
             grid_x = x + col * GRID_SIZE
             grid_y = y + row * GRID_SIZE
-            size = GRID_SIZE - GRID_BORDER
+            size = GRID_SIZE
 
             next unless @view.viewable?(Obj.new(x: grid_x, y: grid_y, width: size, height: size))
 
-            LibRay.draw_rectangle(
+            LibRay.draw_rectangle_lines(
               pos_x: grid_x,
               pos_y: grid_y,
               width: size,
               height: size,
-              color: LibRay::DARKGRAY
+              color: LibRay::BLUE
             )
           end
         end
