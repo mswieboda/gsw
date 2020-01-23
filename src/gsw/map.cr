@@ -13,8 +13,7 @@ module Gsw
       @objs << Ship.new(x: 50, y: 100)
     end
 
-    def move(dx : Int32 = 0, dy : Int32 = 0)
-      puts "Map#move(dx: #{dx}, dy: #{dy})"
+    def move(dx : Int32 | Float32 = 0, dy : Int32 | Float32 = 0)
       @x += dx
       @y += dy
     end
@@ -23,23 +22,26 @@ module Gsw
     end
 
     def draw(parent_x, parent_y)
-      LibRay.draw_rectangle(
-        pos_x: parent_x + x,
-        pos_y: parent_y + y,
-        width: width,
-        height: height,
-        color: LibRay::BLUE
-      )
+      # Grid
+      if Game::DEBUG
+        LibRay.draw_rectangle(
+          pos_x: parent_x + x,
+          pos_y: parent_y + y,
+          width: width,
+          height: height,
+          color: LibRay::BLUE
+        )
 
-      (width / GRID_SIZE).to_i.times do |grid_x|
-        (height / GRID_SIZE).to_i.times do |grid_y|
-          LibRay.draw_rectangle(
-            pos_x: parent_x + x + grid_x * GRID_SIZE,
-            pos_y: parent_y + y + grid_y * GRID_SIZE,
-            width: GRID_SIZE - GRID_BORDER,
-            height: GRID_SIZE - GRID_BORDER,
-            color: LibRay::BLACK
-          )
+        (width / GRID_SIZE).to_i.times do |grid_x|
+          (height / GRID_SIZE).to_i.times do |grid_y|
+            LibRay.draw_rectangle(
+              pos_x: parent_x + x + grid_x * GRID_SIZE,
+              pos_y: parent_y + y + grid_y * GRID_SIZE,
+              width: GRID_SIZE - GRID_BORDER,
+              height: GRID_SIZE - GRID_BORDER,
+              color: LibRay::DARKGRAY
+            )
+          end
         end
       end
 
