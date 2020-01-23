@@ -1,3 +1,5 @@
+require "./obj"
+
 module Gsw
   class Game
     SCREEN_WIDTH  = 1280
@@ -12,6 +14,16 @@ module Gsw
       LibRay.init_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Galactic Space Wars")
       LibRay.init_audio_device
       LibRay.set_target_fps(TARGET_FPS)
+
+      width = (SCREEN_WIDTH / 1.5).to_i
+      height = (SCREEN_HEIGHT / 1.5).to_i
+
+      @map = Map.new(
+        x: ((SCREEN_WIDTH - width) / 2).to_i,
+        y: ((SCREEN_HEIGHT - height) / 2).to_i,
+        width: width,
+        height: height
+      )
     end
 
     def run
@@ -28,6 +40,7 @@ module Gsw
     end
 
     def draw
+      @map.draw
     end
 
     def draw_wrapper
