@@ -1,35 +1,28 @@
 module Gsw
   class View < Obj
-    @map : Map
-
     VIEW_PADDING = 50
     MOVE_SPEED = 150
 
-    def initialize(x, y, width, height, @map : Map)
-      initialize(x: x, y: y, width: width, height: height)
+    def initialize(@x, @y, @width, @height)
+      @view_y = @view_x = 0
     end
 
-    def update(frame_time)
-      dx = dy = 0
-
-      dx -= MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_LEFT, LibRay::KEY_A])
-      dx += MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_RIGHT, LibRay::KEY_D])
-
-      dy -= MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_UP, LibRay::KEY_W])
-      dy += MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_DOWN, LibRay::KEY_S])
-
-      # bounds
-      dx = 0 if @map.x + dx + @map.width < width - VIEW_PADDING || @map.x + dx > 0 + VIEW_PADDING
-      dy = 0 if @map.y + dy + @map.height < height - VIEW_PADDING || @map.y + dy > 0 + VIEW_PADDING
-      @map.move(dx: dx, dy: dy) unless dx == 0 && dy == 0
+    def viewable_x?(obj_x, obj_width)
+      obj_x + obj_width > x + width - VIEW_PADDING && obj_x < x + VIEW_PADDING
     end
 
-    def draw(parent_x, parent_y)
-      @map.draw(x, y)
+    def viewable_y?(obj_y, obj_height)
+      obj_y + obj_height > y + height - VIEW_PADDING && obj_y < y + VIEW_PADDING
+    end
 
+    def viewable?(obj : Obj)
+      obj.x + obj.width > x && obj.x < x + width && obj.y + obj.height > y && obj.y < y + height
+    end
+
+    def draw
       LibRay.draw_rectangle_lines(
-        pos_x: parent_x + x,
-        pos_y: parent_y + y,
+        pos_x: x,
+        pos_y: y,
         width: width,
         height: height,
         color: LibRay::ORANGE

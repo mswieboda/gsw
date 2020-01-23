@@ -1,11 +1,12 @@
 module Gsw
   class Map < Obj
+    @view : View
     @objs : Array(Obj)
 
     GRID_SIZE = 10
     GRID_BORDER = 1
 
-    def initialize(width, height)
+    def initialize(width, height, @view)
       initialize(x: 0, y: 0, width: width, height: height)
 
       @objs = [] of Obj
@@ -18,34 +19,57 @@ module Gsw
       @y += dy
     end
 
-    def update
+    def update(frame_time : Float32)
+      dx = dy = 0
+
+      dx -= View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_LEFT, LibRay::KEY_A])
+      dx += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_RIGHT, LibRay::KEY_D])
+
+      dy -= View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_UP, LibRay::KEY_W])
+      dy += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_DOWN, LibRay::KEY_S])
+
+      @x += dx if @view.viewable_x?(x + dx, width)
+      @y += dy if @view.viewable_y?(y + dy, height)
     end
 
     def draw(parent_x, parent_y)
+      x = parent_x + @x
+      y = parent_y + @y
+
       # Grid
       if Game::DEBUG
         LibRay.draw_rectangle(
-          pos_x: parent_x + x,
-          pos_y: parent_y + y,
+          pos_x: x,
+          pos_y: y,
           width: width,
           height: height,
           color: LibRay::BLUE
         )
 
-        (width / GRID_SIZE).to_i.times do |grid_x|
-          (height / GRID_SIZE).to_i.times do |grid_y|
+        (width / GRID_SIZE).to_i.times do |col|
+          (height / GRID_SIZE).to_i.times do |row|
+            grid_x = x + col * GRID_SIZE
+            grid_y = y + row * GRID_SIZE
+            size = GRID_SIZE - GRID_BORDER
+
+            next unless @view.viewable?(Obj.new(x: grid_x, y: grid_y, width: size, height: size))
+
             LibRay.draw_rectangle(
-              pos_x: parent_x + x + grid_x * GRID_SIZE,
-              pos_y: parent_y + y + grid_y * GRID_SIZE,
-              width: GRID_SIZE - GRID_BORDER,
-              height: GRID_SIZE - GRID_BORDER,
+              pos_x: grid_x,
+              pos_y: grid_y,
+              width: size,
+              height: size,
               color: LibRay::DARKGRAY
             )
           end
         end
       end
 
-      @objs.each(&.draw(parent_x + x, parent_y + y))
+      @objs.select { |obj| @view.viewable?(Obj.new(x: x + obj.x, y: y + obj.y, width: obj.width, height: obj.height)) }.each do |obj|
+        obj.draw(x, y)
+      end
+
+      @view.draw
     end
   end
 end
