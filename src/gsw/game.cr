@@ -15,6 +15,8 @@ module Gsw
       LibRay.init_audio_device
       LibRay.set_target_fps(TARGET_FPS)
 
+      load_sprites
+
       width = (SCREEN_WIDTH / 1.5).to_i
       height = (SCREEN_HEIGHT / 1.5).to_i
 
@@ -29,6 +31,14 @@ module Gsw
         width: 1600,
         height: 1000,
         view: view
+      )
+    end
+
+    def load_sprites
+      Sprite.load(
+        [
+          {asset_file: "ship", frames: 1, rows: 1},
+        ]
       )
     end
 

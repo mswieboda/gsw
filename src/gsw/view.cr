@@ -3,20 +3,22 @@ module Gsw
     VIEW_PADDING =  50
     MOVE_SPEED   = 150
 
-    def initialize(@x, @y, @width, @height)
-      @view_y = @view_x = 0
+    def movable_x?(map, dx)
+      map_x = map.x + dx
+      map_x + map.width > x + width - VIEW_PADDING && map_x < x + VIEW_PADDING
     end
 
-    def viewable_x?(obj_x, obj_width)
-      obj_x + obj_width > x + width - VIEW_PADDING && obj_x < x + VIEW_PADDING
+    def movable_y?(map, dy)
+      map_y = map.y + dy
+      map_y + map.height > y + height - VIEW_PADDING && map_y < y + VIEW_PADDING
     end
 
-    def viewable_y?(obj_y, obj_height)
-      obj_y + obj_height > y + height - VIEW_PADDING && obj_y < y + VIEW_PADDING
+    def viewable?(obj : {x: Int32 | Float32, y: Int32 | Float32, width: Int32 | Float32, height: Int32 | Float32})
+      obj[:x] + obj[:width] > x && obj[:x] < x + width && obj[:y] + obj[:height] > y && obj[:y] < y + height
     end
 
     def viewable?(obj : Obj)
-      obj.x + obj.width > x && obj.x < x + width && obj.y + obj.height > y && obj.y < y + height
+      viewable?({x: obj.x, y: obj.y, width: obj.width, height: obj.height})
     end
 
     def draw

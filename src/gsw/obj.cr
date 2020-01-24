@@ -8,10 +8,10 @@ module Gsw
     def initialize(@x, @y, @width, @height)
     end
 
-    def update
+    def update(_frame_time)
     end
 
-    def draw(parent_x, parent_y)
+    def draw(_parent_x, _parent_y)
     end
   end
 end
