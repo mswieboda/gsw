@@ -1,7 +1,7 @@
 module Gsw
   class View < Obj
-    VIEW_PADDING = 50
-    MOVE_SPEED = 150
+    VIEW_PADDING =  50
+    MOVE_SPEED   = 150
 
     def initialize(@x, @y, @width, @height)
       @view_y = @view_x = 0
@@ -26,6 +26,49 @@ module Gsw
         width: width,
         height: height,
         color: LibRay::ORANGE
+      )
+
+      draw_temp_viewport_border
+    end
+
+    def draw_temp_viewport_border
+      color = LibRay::BLACK
+
+      # draw temp border around viewport
+      # top
+      LibRay.draw_rectangle(
+        pos_x: x,
+        pos_y: y - VIEW_PADDING * 2,
+        width: width,
+        height: VIEW_PADDING * 2,
+        color: color
+      )
+
+      # bottom
+      LibRay.draw_rectangle(
+        pos_x: x,
+        pos_y: y + height,
+        width: width,
+        height: VIEW_PADDING * 2,
+        color: color
+      )
+
+      # left
+      LibRay.draw_rectangle(
+        pos_x: x - VIEW_PADDING * 2,
+        pos_y: y - VIEW_PADDING * 2,
+        width: VIEW_PADDING * 2,
+        height: height + VIEW_PADDING * 4,
+        color: color
+      )
+
+      # right
+      LibRay.draw_rectangle(
+        pos_x: x + width,
+        pos_y: y - VIEW_PADDING * 2,
+        width: VIEW_PADDING * 2,
+        height: height + VIEW_PADDING * 4,
+        color: color
       )
     end
   end
