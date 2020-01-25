@@ -11,7 +11,8 @@ module Gsw
     end
 
     def rotate_towards(target : Point)
-      puts target
+      radians = Math.atan2(target.y - y, target.x - x)
+      @rotation = radians * (180_f32 / Math::PI)
     end
 
     def draw(parent_x, parent_y)
