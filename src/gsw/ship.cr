@@ -10,11 +10,15 @@ module Gsw
       @sprite = Sprite.get("ship")
     end
 
+    def rotate_towards(target : Point)
+      puts target
+    end
+
     def draw(parent_x, parent_y)
       sprite.draw_partial(
         x: parent_x + x,
         y: parent_y + y,
-        rotation: 0,
+        rotation: rotation,
         tint: LibRay::RED
       )
     end

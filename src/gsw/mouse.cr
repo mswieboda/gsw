@@ -13,7 +13,7 @@ module Gsw
     end
 
     def self.get
-      {x: x, y: y}
+      Point.new(x: x, y: y)
     end
 
     def self.pressed?(button)

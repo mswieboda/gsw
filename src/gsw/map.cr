@@ -1,7 +1,7 @@
 module Gsw
   class Map < Obj
     @view : View
-    @objs : Array(Obj)
+    @ships : Array(Ship)
 
     GRID_SIZE   = 10
     GRID_BORDER =  1
@@ -9,16 +9,16 @@ module Gsw
     def initialize(width, height, @view)
       initialize(x: @view.map_initial_x, y: @view.map_initial_y, width: width, height: height)
 
-      @objs = [] of Obj
+      @ships = [] of Ship
 
-      @objs << Ship.new(x: 50, y: 100)
+      @ships << Ship.new(x: 50, y: 100)
     end
 
     def update(frame_time : Float32)
       move(frame_time)
       mouse_click
 
-      @objs.each(&.update(frame_time))
+      @ships.each(&.update(frame_time))
     end
 
     def move(frame_time)
@@ -30,24 +30,40 @@ module Gsw
       dy += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_UP, LibRay::KEY_W])
       dy -= View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_DOWN, LibRay::KEY_S])
 
-      @x += dx if @view.movable_x?(self, dx)
-      @y += dy if @view.movable_y?(self, dy)
+      return if dx == 0 && dy == 0
+
+      new_x = x
+      new_y = y
+
+      new_x += dx if @view.movable_x?(self, dx)
+      new_y += dy if @view.movable_y?(self, dy)
+
+      move(new_x, new_y)
+    end
+
+    def move(new_x, new_y)
+      @point.x = new_x unless new_x == x
+      @point.y = new_y unless new_y == y
     end
 
     def mouse_click
       if Mouse.pressed?(Mouse::LEFT)
-        mouse = Mouse.get
+        target = Mouse.get
 
-        if @view.viewable?({x: mouse[:x], y: mouse[:y], width: 1, height: 1})
-          map_xy = {x: (mouse[:x] - x).to_i, y: (mouse[:y] - y).to_i}
-          puts "go to #{map_xy}"
+        if @view.viewable?(target, width: 1, height: 1)
+          target.x -= x
+          target.y -= y
+
+          @ships.each do |ship|
+            ship.rotate_towards(target)
+          end
         end
       end
     end
 
     def draw(parent_x, parent_y)
-      x = parent_x + @x
-      y = parent_y + @y
+      x = parent_x + point.x
+      y = parent_y + point.y
 
       # Grid
       if Game::DEBUG
@@ -57,7 +73,7 @@ module Gsw
             grid_y = y + row * GRID_SIZE
             size = GRID_SIZE
 
-            next unless @view.viewable?({x: grid_x, y: grid_y, width: size, height: size})
+            next unless @view.viewable?(Point.new(x: grid_x, y: grid_y), width: size, height: size)
 
             LibRay.draw_rectangle_lines(
               pos_x: grid_x,
@@ -70,7 +86,7 @@ module Gsw
         end
       end
 
-      @objs.select { |obj| @view.viewable?({x: x + obj.x, y: y + obj.y, width: obj.width, height: obj.height}) }.each do |obj|
+      @ships.select { |obj| @view.viewable?(Point.new(x: x + obj.x, y: y + obj.y), width: obj.width, height: obj.height) }.each do |obj|
         obj.draw(x, y)
       end
 

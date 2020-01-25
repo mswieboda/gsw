@@ -21,12 +21,12 @@ module Gsw
       map_y + map.height > y + height - VIEW_PADDING && map_y < y + VIEW_PADDING
     end
 
-    def viewable?(obj : {x: Int32 | Float32, y: Int32 | Float32, width: Int32 | Float32, height: Int32 | Float32})
-      obj[:x] + obj[:width] > x && obj[:x] < x + width && obj[:y] + obj[:height] > y && obj[:y] < y + height
+    def viewable?(point : Point, width : Int32 | Float32, height : Int32 | Float32)
+      point.x + width > x && point.x < x + @width && point.y + height > y && point.y < y + @height
     end
 
     def viewable?(obj : Obj)
-      viewable?({x: obj.x, y: obj.y, width: obj.width, height: obj.height})
+      viewable?(obj.point, width: obj.width, height: obj.height)
     end
 
     def draw
