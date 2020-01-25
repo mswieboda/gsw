@@ -3,6 +3,14 @@ module Gsw
     VIEW_PADDING =  50
     MOVE_SPEED   = 150
 
+    def map_initial_x
+      x + VIEW_PADDING
+    end
+
+    def map_initial_y
+      y + VIEW_PADDING
+    end
+
     def movable_x?(map, dx)
       map_x = map.x + dx
       map_x + map.width > x + width - VIEW_PADDING && map_x < x + VIEW_PADDING

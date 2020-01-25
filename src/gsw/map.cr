@@ -7,26 +7,21 @@ module Gsw
     GRID_BORDER =  1
 
     def initialize(width, height, @view)
-      initialize(x: 0, y: 0, width: width, height: height)
+      initialize(x: @view.map_initial_x, y: @view.map_initial_y, width: width, height: height)
 
       @objs = [] of Obj
 
       @objs << Ship.new(x: 50, y: 100)
     end
 
-    def move(dx : Int32 | Float32 = 0, dy : Int32 | Float32 = 0)
-      @x += dx
-      @y += dy
-    end
-
     def update(frame_time : Float32)
-      move_viewport(frame_time)
+      move(frame_time)
       mouse_click
 
       @objs.each(&.update(frame_time))
     end
 
-    def move_viewport(frame_time)
+    def move(frame_time)
       dx = dy = 0
 
       dx += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_LEFT, LibRay::KEY_A])
