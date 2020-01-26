@@ -30,13 +30,18 @@ module Gsw
     end
 
     def draw
-      LibRay.draw_rectangle_lines(
-        pos_x: x,
-        pos_y: y,
-        width: width,
-        height: height,
-        color: LibRay::ORANGE
-      )
+      color = LibRay::ORANGE
+      color.a = 50
+
+      if Game::DEBUG
+        LibRay.draw_rectangle_lines(
+          pos_x: x,
+          pos_y: y,
+          width: width,
+          height: height,
+          color: color
+        )
+      end
 
       draw_temp_viewport_border
     end

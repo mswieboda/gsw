@@ -33,7 +33,11 @@ module Gsw
         width: 1600,
         height: 1000,
         view: view,
-        units: [Ship.new(50, 75).as(Unit)]
+        units: [
+          Ship.new(10, 75).as(Unit),
+          Ship.new(25, 50).as(Unit),
+          Ship.new(30, 125).as(Unit),
+        ]
       )
     end
 

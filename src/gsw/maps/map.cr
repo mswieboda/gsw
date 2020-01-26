@@ -4,8 +4,8 @@ module Gsw
     @selection : SelectionBox
     @units : Array(Unit)
 
-    GRID_SIZE   = 10
-    GRID_BORDER =  1
+    GRID_SIZE  = 16
+    GRID_COLOR = LibRay::Color.new(r: 75, b: 75, g: 255, a: 35)
 
     def initialize(width, height, @view, @units = [] of Unit)
       initialize(x: @view.map_initial_x, y: @view.map_initial_y, width: width, height: height)
@@ -127,7 +127,7 @@ module Gsw
               pos_y: y + grid_y,
               width: size,
               height: size,
-              color: LibRay::BLUE
+              color: GRID_COLOR
             )
           end
         end
