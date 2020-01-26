@@ -1,14 +1,14 @@
 module Gsw
   class Obj
-    getter point : Point
+    getter position : Vector
     getter width : Int32 | Float32
     getter height : Int32 | Float32
     getter rotation : Int32 | Float32 | Float64
 
-    delegate :x, :y, to: point
+    delegate :x, :y, to: position
 
     def initialize(x, y, @width, @height, @rotation = 0)
-      @point = Point.new(x: x, y: y)
+      @position = Vector.new(x: x, y: y)
     end
 
     def update(_frame_time)

@@ -38,8 +38,8 @@ module Gsw
     end
 
     def move(new_x, new_y)
-      @point.x = new_x unless new_x == x
-      @point.y = new_y unless new_y == y
+      @position.x = new_x unless new_x == x
+      @position.y = new_y unless new_y == y
     end
 
     def mouse_click
@@ -62,7 +62,7 @@ module Gsw
     end
 
     def viewable?(obj_x, obj_y, width, height)
-      @view.viewable?(Point.new(x: x + obj_x, y: y + obj_y), width: width, height: height)
+      @view.viewable?(Vector.new(x: x + obj_x, y: y + obj_y), width: width, height: height)
     end
 
     def draw(_parent_x, _parent_y)

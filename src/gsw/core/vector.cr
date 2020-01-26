@@ -1,5 +1,5 @@
 module Gsw
-  class Point
+  class Vector
     property x : Int32 | Float32
     property y : Int32 | Float32
 

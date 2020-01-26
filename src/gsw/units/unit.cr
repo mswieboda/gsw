@@ -22,12 +22,12 @@ module Gsw
       @action = nil
     end
 
-    def rotate_to(target : Point)
+    def rotate_to(target : Vector)
       radians = Math.atan2(target.y - y, target.x - x)
       @rotation = radians * (180_f32 / Math::PI)
     end
 
-    def move_towards(target : Point, frame_time)
+    def move_towards(target : Vector, frame_time)
       # TODO: https://gamedev.stackexchange.com/a/23450/98360
     end
 

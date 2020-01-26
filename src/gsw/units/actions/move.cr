@@ -1,6 +1,6 @@
 module Gsw
   class Move < Action
-    getter target : Point
+    getter target : Vector
 
     def initialize(@target)
     end
