@@ -16,8 +16,12 @@ module Gsw
       @selected = false
     end
 
-    def select(target)
+    def select(target : Vector)
       @selected = true if collision?(target)
+    end
+
+    def select(selection : SelectionBox)
+      @selected = true if selection.collision?(self)
     end
 
     def deselect

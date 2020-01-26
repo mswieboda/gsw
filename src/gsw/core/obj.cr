@@ -13,7 +13,7 @@ module Gsw
 
     def collision?(other : Vector)
       x < other.x &&
-        x + width > x &&
+        x + width > other.x &&
         y < other.y &&
         y + height > other.y
     end

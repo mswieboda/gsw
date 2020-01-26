@@ -3,6 +3,10 @@ module Gsw
     property x : Int32 | Float32 | Float64
     property y : Int32 | Float32 | Float64
 
+    def initialize
+      @x = @y = 0
+    end
+
     def initialize(@x, @y)
     end
 
@@ -14,8 +18,16 @@ module Gsw
       Math.sqrt(x * x + y * y)
     end
 
-    def distance(v : Vector)
-      (v - self).length
+    def distance(other : Vector)
+      (other - self).length
+    end
+
+    def width(other : Vector)
+      other.x - x
+    end
+
+    def height(other : Vector)
+      other.y - y
     end
 
     def normalize

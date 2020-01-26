@@ -1,6 +1,7 @@
 module Gsw
   class Map < Obj
     @view : View
+    @selection : SelectionBox
     @units : Array(Unit)
 
     GRID_SIZE   = 10
@@ -8,6 +9,8 @@ module Gsw
 
     def initialize(width, height, @view, @units = [] of Unit)
       initialize(x: @view.map_initial_x, y: @view.map_initial_y, width: width, height: height)
+
+      @selection = SelectionBox.new
     end
 
     def update(frame_time : Float32)
@@ -44,31 +47,57 @@ module Gsw
 
     def mouse_click
       if Mouse.pressed?(Mouse::LEFT)
-        target = Mouse.get
+        mouse = Mouse.get
 
-        if @view.viewable?(target, width: 1, height: 1)
-          target.x -= x
-          target.y -= y
+        if @view.viewable?(mouse, width: 1, height: 1)
+          mouse.x -= x
+          mouse.y -= y
 
           @units.each do |unit|
             if unit.selected?
               unit.deselect
             else
-              unit.select(target)
+              unit.select(mouse)
             end
           end
         end
       end
 
-      if Mouse.pressed?(Mouse::RIGHT)
-        target = Mouse.get
+      if Mouse.down?(Mouse::LEFT)
+        mouse = Mouse.get
 
-        if @view.viewable?(target, width: 1, height: 1)
-          target.x -= x
-          target.y -= y
+        if @view.viewable?(mouse, width: 1, height: 1)
+          mouse.x -= x
+          mouse.y -= y
+
+          if @selection.selecting?
+            @selection.current = mouse
+          else
+            @selection.start(mouse)
+          end
+        end
+      end
+
+      if Mouse.released?(Mouse::LEFT)
+        if @selection.selecting?
+          @units.each do |unit|
+            unit.deselect if unit.selected?
+            unit.select(@selection)
+          end
+
+          @selection.deselect
+        end
+      end
+
+      if Mouse.pressed?(Mouse::RIGHT)
+        mouse = Mouse.get
+
+        if @view.viewable?(mouse, width: 1, height: 1)
+          mouse.x -= x
+          mouse.y -= y
 
           @units.select(&.selected?).each do |unit|
-            unit.queue(Move.new(unit, target))
+            unit.queue(Move.new(unit, mouse))
           end
         end
       end
@@ -108,6 +137,7 @@ module Gsw
         unit.draw(x, y)
       end
 
+      @selection.draw(x, y)
       @view.draw
     end
   end
