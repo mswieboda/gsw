@@ -32,7 +32,8 @@ module Gsw
       @map = Map.new(
         width: 1600,
         height: 1000,
-        view: view
+        view: view,
+        units: [Ship.new(50, 75).as(Unit)]
       )
     end
 
