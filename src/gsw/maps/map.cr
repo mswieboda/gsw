@@ -14,35 +14,11 @@ module Gsw
     end
 
     def update(frame_time : Float32)
-      move(frame_time)
+      @view.update(frame_time, self)
+
       mouse_click
 
       @units.each(&.update(frame_time))
-    end
-
-    def move(frame_time)
-      dx = dy = 0
-
-      dx += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_LEFT, LibRay::KEY_A])
-      dx -= View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_RIGHT, LibRay::KEY_D])
-
-      dy += View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_UP, LibRay::KEY_W])
-      dy -= View::MOVE_SPEED * frame_time if Keys.down?([LibRay::KEY_DOWN, LibRay::KEY_S])
-
-      return if dx == 0 && dy == 0
-
-      new_x = x
-      new_y = y
-
-      new_x += dx if @view.movable_x?(self, dx)
-      new_y += dy if @view.movable_y?(self, dy)
-
-      move(new_x, new_y)
-    end
-
-    def move(new_x, new_y)
-      @position.x = new_x unless new_x == x
-      @position.y = new_y unless new_y == y
     end
 
     def mouse_click
