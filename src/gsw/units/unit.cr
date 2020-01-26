@@ -27,12 +27,12 @@ module Gsw
       @rotation = radians * (180_f32 / Math::PI)
     end
 
-    def move_towards(target : Vector, frame_time)
-      # TODO: https://gamedev.stackexchange.com/a/23450/98360
+    def move(direction : Vector, frame_time)
+      @position += direction * SPEED * frame_time
     end
 
     def update(frame_time)
-      @action.try(&.perform(self, frame_time))
+      @action.try(&.perform(frame_time))
     end
 
     def draw(parent_x, parent_y)

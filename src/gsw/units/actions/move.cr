@@ -1,17 +1,31 @@
 module Gsw
   class Move < Action
+    getter performing : Bool
+    getter unit : Unit
     getter target : Vector
+    getter initial : Vector
+    getter direction : Vector
+    getter distance : Int32 | Float32 | Float64
 
-    def initialize(@target)
+    def initialize(@unit : Unit, @target : Vector)
+      @performing = false
+      @initial = unit.position
+      @direction = (target - initial).normalize
+
+      # TODO: calc distance - width/height (times rotation)
+      @distance = initial.distance(target)
     end
 
-    def perform(unit : Unit, frame_time)
-      # puts "moving to #{target} for #{unit}"
-      unit.rotate_to(target)
-      unit.move_towards(target, frame_time)
+    def perform(frame_time)
+      unit.rotate_to(target) unless performing
+      unit.move(direction, frame_time)
 
-      # if close then complete action
-      # unit.action_completed(self)
+      if (initial.distance(unit.position) >= distance)
+        # stop, remove action
+        @unit.finish
+      else
+        @performing = true
+      end
     end
   end
 end

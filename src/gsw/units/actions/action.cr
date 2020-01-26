@@ -1,6 +1,9 @@
 module Gsw
   class Action
-    def perform(_unit : Unit, _frame_time)
+    def initialize(@unit : Unit)
+    end
+
+    def perform(_frame_time)
       raise "generic action"
     end
   end
