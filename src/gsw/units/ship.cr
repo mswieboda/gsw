@@ -1,22 +1,13 @@
 module Gsw
-  class Ship < Obj
-    getter sprite : Sprite
-
+  class Ship < Unit
     SIZE = 100
 
     def initialize(x, y)
-      initialize(x: x, y: y, width: SIZE, height: SIZE)
-
-      @sprite = Sprite.get("ship")
-    end
-
-    def rotate_towards(target : Point)
-      radians = Math.atan2(target.y - y, target.x - x)
-      @rotation = radians * (180_f32 / Math::PI)
+      initialize(name: "ship", x: x, y: y, width: SIZE, height: SIZE)
     end
 
     def draw(parent_x, parent_y)
-      sprite.draw_partial(
+      sprite.draw(
         x: parent_x + x,
         y: parent_y + y,
         rotation: rotation,

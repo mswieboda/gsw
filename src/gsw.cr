@@ -1,6 +1,6 @@
 require "cray"
 
-require "./gsw/**"
+require "./gsw/game"
 
 module Gsw
   def self.run

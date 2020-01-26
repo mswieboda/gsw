@@ -1,3 +1,7 @@
+require "./core/**"
+require "./units/unit.cr"
+require "./**"
+
 module Gsw
   class Game
     SCREEN_WIDTH  = 1280
