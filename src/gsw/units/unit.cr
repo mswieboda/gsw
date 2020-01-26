@@ -1,17 +1,27 @@
 module Gsw
   class Unit < Obj
     getter sprite : Sprite
+    getter? selected : Bool
 
     @action : Action | Nil
 
-    SIZE  = 100
     SPEED = 100
 
-    def initialize(name, x, y, width, height)
-      initialize(x: x, y: y, width: width, height: height)
-
+    def initialize(name, x, y)
       @sprite = Sprite.get(name)
+
+      initialize(x: x, y: y, width: sprite.width, height: sprite.height)
+
       @action = nil
+      @selected = false
+    end
+
+    def select(target)
+      @selected = true if collision?(target)
+    end
+
+    def deselect
+      @selected = false
     end
 
     def queue(action : Action)
@@ -42,6 +52,16 @@ module Gsw
         rotation: rotation,
         tint: LibRay::RED
       )
+
+      if selected?
+        LibRay.draw_rectangle_lines(
+          pos_x: parent_x + x,
+          pos_y: parent_y + y,
+          width: width,
+          height: height,
+          color: LibRay::ORANGE
+        )
+      end
     end
   end
 end

@@ -11,6 +11,13 @@ module Gsw
       @position = Vector.new(x: x, y: y)
     end
 
+    def collision?(other : Vector)
+      x < other.x &&
+        x + width > x &&
+        y < other.y &&
+        y + height > other.y
+    end
+
     def update(_frame_time)
     end
 

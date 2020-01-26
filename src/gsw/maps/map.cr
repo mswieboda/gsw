@@ -51,6 +51,23 @@ module Gsw
           target.y -= y
 
           @units.each do |unit|
+            if unit.selected?
+              unit.deselect
+            else
+              unit.select(target)
+            end
+          end
+        end
+      end
+
+      if Mouse.pressed?(Mouse::RIGHT)
+        target = Mouse.get
+
+        if @view.viewable?(target, width: 1, height: 1)
+          target.x -= x
+          target.y -= y
+
+          @units.select(&.selected?).each do |unit|
             unit.queue(Move.new(unit, target))
           end
         end
