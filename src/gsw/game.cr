@@ -14,8 +14,9 @@ module Gsw
 
     def initialize
       LibRay.init_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Galactic Space Wars")
-      LibRay.init_audio_device
+      LibRay.clear_background(LibRay::BLACK)
       LibRay.set_target_fps(TARGET_FPS)
+      LibRay.init_audio_device
 
       load_sprites
 
@@ -69,7 +70,6 @@ module Gsw
 
     def draw_wrapper
       LibRay.begin_drawing
-      LibRay.clear_background LibRay::BLACK
 
       draw
 
