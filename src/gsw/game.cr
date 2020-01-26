@@ -1,5 +1,3 @@
-require "./obj"
-
 module Gsw
   class Game
     SCREEN_WIDTH  = 1280

@@ -12,6 +12,8 @@ module Gsw
 
     DEBUG = false
 
+    SPRITE_ASSET_PATH = "../../../assets/sprites"
+
     def initialize(@asset_file, @frames, @rows)
       @texture = LibRay::Texture2D.new
       @width = 0
@@ -82,7 +84,7 @@ module Gsw
     def self.load_texture(asset_file)
       puts "loading texture: #{asset_file}" if DEBUG
 
-      @@textures[asset_file] ||= LibRay.load_texture(File.join(__DIR__, "../../assets/sprites/#{asset_file}.png"))
+      @@textures[asset_file] ||= LibRay.load_texture(File.join(__DIR__, SPRITE_ASSET_PATH, "#{asset_file}.png"))
 
       texture = @@textures[asset_file]
 
