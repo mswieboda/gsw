@@ -16,41 +16,35 @@ module Gsw
     def update(frame_time : Float32)
       @view.update(frame_time, self)
 
-      mouse_click
+      update_cursor
 
       @units.each(&.update(frame_time))
     end
 
-    def mouse_click
+    def get_cursor
+      Mouse.translated(x, y)
+    end
+
+    def update_cursor
       if Mouse.pressed?(Mouse::LEFT)
-        mouse = Mouse.get
+        cursor = get_cursor
 
-        if @view.viewable?(mouse, width: 1, height: 1)
-          mouse.x -= x
-          mouse.y -= y
-
-          @units.each do |unit|
-            if unit.selected?
-              unit.deselect
-            else
-              unit.select(mouse)
-            end
+        @units.each do |unit|
+          if unit.selected?
+            unit.deselect
+          else
+            unit.select(cursor)
           end
         end
       end
 
       if Mouse.down?(Mouse::LEFT)
-        mouse = Mouse.get
+        cursor = get_cursor
 
-        if @view.viewable?(mouse, width: 1, height: 1)
-          mouse.x -= x
-          mouse.y -= y
-
-          if @selection.selecting?
-            @selection.current = mouse
-          else
-            @selection.start(mouse)
-          end
+        if @selection.selecting?
+          @selection.current = cursor
+        else
+          @selection.start(cursor)
         end
       end
 
@@ -66,15 +60,10 @@ module Gsw
       end
 
       if Mouse.pressed?(Mouse::RIGHT)
-        mouse = Mouse.get
+        cursor = get_cursor
 
-        if @view.viewable?(mouse, width: 1, height: 1)
-          mouse.x -= x
-          mouse.y -= y
-
-          @units.select(&.selected?).each do |unit|
-            unit.queue(Move.new(unit, mouse))
-          end
+        @units.select(&.selected?).each do |unit|
+          unit.queue(Move.new(unit, cursor))
         end
       end
     end

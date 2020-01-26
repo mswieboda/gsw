@@ -16,6 +16,10 @@ module Gsw
       Vector.new(x: x, y: y)
     end
 
+    def self.translated(parent_x, parent_y)
+      Vector.new(x: x - parent_x, y: y - parent_y)
+    end
+
     def self.pressed?(button)
       LibRay.mouse_button_pressed?(button)
     end
