@@ -51,7 +51,7 @@ module Gsw
           target.y -= y
 
           @units.each do |unit|
-            unit.rotate_towards(target)
+            unit.queue(Move.new(target))
           end
         end
       end
